@@ -30,9 +30,13 @@ Some solutions that have been suggested are:
 # Proposal
 It is proposed that the framing format from IRC SHALL be changed from RFC1459 to JSON with a length header, like so:
 
-`([0-9]*){<frame>`
+`([0-9]*){<frame>}`
 
 Where the first group is a number from 1 to infinity. It is RECOMMENDED the limit for frames be capped at 16,384 bytes, the length of keys capped at 16 bytes, the length of string values at 8,192 bytes, and the length of arrays to 1,024 elements.
+
+The top level element in a frame SHALL be an object. Scalars and arrays MUST NOT be used.
+
+The format of the JSON frame SHALL strictly conform to [RFC 8259](https://tools.ietf.org/html/rfc8259), with restrictions defined in [RFC 7493](https://tools.ietf.org/html/rfc7493) applying. In case of conflict between the two standards, RFC8259 SHALL take precedent. JSON extensions MUST NOT be used.
 
 [JSON Schema](http://json-schema.org/) SHALL be used to define frames and command layouts.
 
