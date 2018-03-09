@@ -1,7 +1,9 @@
+---
 Title: JSON Framing for IRCv4
 Author: Elizabeth Myers <elizabeth@interlinked.me>
 Date: 9 March 2018
 Status: Draft
+---
 
 # Preface
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in [RFC 2119](https://www.ietf.org/rfc/rfc2119.txt).
