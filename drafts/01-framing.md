@@ -25,10 +25,14 @@ Some solutions that have been suggested are:
 - Extending RFC1459 framing; tags were suggested by IRCv3, but they have very little adoption and just put lipstick on a pig
 - A binary protocol such as BSON, protobufs, or a custom binary protocol; good in theory, but often gives little advantage in the real world in terms of parsing speed, makes debugging harder, and makes presentation harder; there is also no schema system defined for such protocols (except protobufs)
 - XML; error-prone, slow to parse, and many XML parsers [still contain vulnerabilities](https://docs.python.org/3/library/xml.html#xml-vulnerabilities); experience with XMPP shows little enthusiasm for XML-based protocols
-- JSON; had some ambiguities years back with parsers behaving badly, but the situation has improved; there is also a schema system known as [JSON Schema](http://json-schema.org/).
+- JSON; had some ambiguities years back with parsers behaving badly, but the situation has improved; there is also a schema system known as [JSON Schema](http://json-schema.org/). Some additional framing is necessary for use in streaming protocols, however.
 
 # Proposal
-It is proposed that the framing format from IRC SHALL be changed from RFC1459 to JSON.
+It is proposed that the framing format from IRC SHALL be changed from RFC1459 to JSON with a length header, like so:
+
+`([0-9]*){<frame>`
+
+Where the first group is a number from 1 to infinity. It is RECOMMENDED the limit for frames be capped at 16,384 bytes, the length of keys capped at 16 bytes, the length of string values at 8,192 bytes, and the length of arrays to 1,024 elements.
 
 [JSON Schema](http://json-schema.org/) SHALL be used to define frames and command layouts.
 
