@@ -24,8 +24,8 @@ Some solutions that have been suggested are:
 - A key:value based net string format; easy to parse, but no off-the-shelf parsers. Magic characters are needed to prevent ambiguity in most proposals, e.g. from numbers.
 - Extending RFC1459 framing; tags were suggested by IRCv3, but they have very little adoption and just put lipstick on a pig
 - A binary protocol such as BSON, protobufs, or a custom binary protocol; good in theory, but often gives little advantage in the real world in terms of parsing speed, makes debugging harder, and makes presentation harder; there is also no schema system defined for such protocols (except protobufs)
-- XML; error-prone, slow to parse, and many XML parsers [still contain vulnerabilities](https://docs.python.org/3/library/xml.html#xml-vulnerabilities); experience with XMPP shows little enthusiasm for XML-based protocols
-- JSON; had some ambiguities years back with parsers behaving badly, but the situation has improved; there is also a schema system known as [JSON Schema](http://json-schema.org/). Some additional framing is necessary for use in streaming protocols, however.
+- XML; error-prone, slow to parse, and many XML parsers [still contain vulnerabilities](https://docs.python.org/3/library/xml.html#xml-vulnerabilities); experience with XMPP shows little enthusiasm for XML-based protocols despite widespread use of XML in business
+- JSON; had some ambiguities years back with parsers behaving badly, but the situation has improved and JSON usage is now widespread; there is also a schema system known as [JSON Schema](http://json-schema.org/); some additional framing is necessary for use in streaming protocols
 
 # Proposal
 It is proposed that the framing format from IRC SHALL be changed from RFC1459 to JSON with a length header, like so:
