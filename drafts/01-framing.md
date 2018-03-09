@@ -21,7 +21,7 @@ It's time to retire it and replace it with a more modern format.
 Some solutions that have been suggested are:
 - Leaving the framing format alone; compatible, but not ideal for reasons shown above, and achieves nothing
 - Using RFC1459 framing with an increased line length; solves one problem, but not the others
-- A key:value based net string format; easy to parse, but no off-the-shelf parsers. Magic characters are needed to prevent ambiguity in most proposals.
+- A key:value based net string format; easy to parse, but no off-the-shelf parsers. Magic characters are needed to prevent ambiguity in most proposals, e.g. from numbers.
 - Extending RFC1459 framing; tags were suggested by IRCv3, but they have very little adoption and just put lipstick on a pig
 - A binary protocol such as BSON, protobufs, or a custom binary protocol; good in theory, but often gives little advantage in the real world in terms of parsing speed, makes debugging harder, and makes presentation harder; there is also no schema system defined for such protocols (except protobufs)
 - XML; error-prone, slow to parse, and many XML parsers [still contain vulnerabilities](https://docs.python.org/3/library/xml.html#xml-vulnerabilities); experience with XMPP shows little enthusiasm for XML-based protocols
