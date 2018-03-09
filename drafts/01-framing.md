@@ -35,5 +35,8 @@ This proposal means the probable abandonment of *de facto* ports 6667, 6697, and
 # Details
 The schemata proposed for usage can be found in `schemata/` in the root directory of this project. This draft defers to those schemata, for conciseness and to allow further changes. Implementers MUST conform to these schemata upon adopting this proposal.
 
+# Security issues
+None known.
+
 # Backwards compatibility
 This change is not backwards compatible with the old protocol. Compatibility will be handled on a command-by-command basis. A future draft will define mappings between old commands and new ones, to ensure interoperability.
