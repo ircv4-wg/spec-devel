@@ -1,14 +1,14 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
     "$id": "http://example.org/tbd",
-    "title": "IRCv4 server-to-client frame",
-    "description": "Specification for the IRCv4 server-to-client frame",
+    "title": "IRCv4 client-to-server frame",
+    "description": "Specification for the IRCv4 client-to-server frame",
     "definitions":
     {
         "target":
         {
             "title": "Object targeting",
-            "description": "Message targets, including to and from",
+            "description": "Targeting of messages to destinations",
             "type": "object",
             "properties":
             {
@@ -27,17 +27,17 @@
                 "server":
                 {
                     "title": "Server name",
-                    "description": "Server this command was sent from",
+                    "description": "Server this command is being sent to (default local)",
                     "type": "hostname"
                 },
                 "local":
                 {
                     "title": "Local flag",
-                    "description": "Describes if the command originated from a federated server",
+                    "description": "Describes if the command is for a federated server",
                     "type": "boolean"
                 }
             },
-            "required": ["type", "target", "server", "local"]
+            "required": ["type", "target", "local"]
         }
     },
     "properties":
@@ -47,15 +47,10 @@
             "title": "Frame destination",
             "$ref": "#/definitions/target"
         },
-        "from":
-        {
-            "title": "Frame source",
-            "$ref": "#/definitions/target"
-        },
         "command":
         {
             "title": "Command",
-            "description": "Action that has or is being performed",
+            "description": "Action that is requested",
             "type": "string"
         },
         "parameters":
@@ -67,30 +62,18 @@
         "time":
         {
             "title": "Command send time",
-            "description": "Server-side time the command was sent to the client",
+            "description": "Client-side time the command was sent to the client",
+            "$comment": "TBD: May be removed for c2s usage",
             "type": "date-time"
         },
         "id":
         {
             "title": "Command ID",
-            "description": "ID sent by the client for a command",
-            "$comment": "Since IRCv4 is fully asynchronous, some actions may be deferred in what is known as a transaction, especially ones that may take a while to execute. Once the action completed, the ID used by the client for the triggering command will be sent back.",
+            "description": "Unique command ID",
+            "$comment": "Clients should send this field with each command, to which the server will respond with the id once the action is completed",
             "type": "integer"
         },
-        "completed":
-        {
-            "title": "Transaction completion status",
-            "description": "Describes whether or not a transaction is complete",
-            "type": "boolean"
-        },
-        "success":
-        {
-            "title": "Success flag",
-            "description": "Whether or not the command was successful",
-            "type": "boolean",
-            "$comment": "Error information will be stored in parameters, including code", "string, and other information"
-        },
-        "required": ["from", "command", "parameters", "time", "success"]
+        "required": ["from", "command", "parameters", "id"]
     }
 }
 
