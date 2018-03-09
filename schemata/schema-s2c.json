@@ -1,0 +1,96 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "http://example.org/tbd",
+    "title": "IRCv4 server-to-client frame",
+    "description": "Specification for the IRCv4 server-to-client frame",
+    "definitions":
+    {
+        "target":
+        {
+            "title": "Object targeting",
+            "description": "Message targets, including to and from",
+            "type": "object",
+            "properties":
+            {
+                "type":
+                {
+                    "title": "Target type",
+                    "description": "Describes what the target is",
+                    "type": "string"
+                },
+                "target":
+                {
+                    "title": "Target name",
+                    "description": "Name of the target; must be valid given the target type",
+                    "type": "string"
+                },
+                "server":
+                {
+                    "title": "Server name",
+                    "description": "Server this command was sent from",
+                    "type": "hostname"
+                },
+                "local":
+                {
+                    "title": "Local flag",
+                    "description": "Describes if the command originated from a federated server",
+                    "type": "boolean"
+                }
+            },
+            "required": ["type", "target", "server", "local"]
+        }
+    },
+    "properties":
+    {
+        "to":
+        {
+            "title": "Frame destination",
+            "$ref": "#/definitions/target"
+        },
+        "from":
+        {
+            "title": "Frame source",
+            "$ref": "#/definitions/target"
+        },
+        "command":
+        {
+            "title": "Command",
+            "description": "Action that has or is being performed",
+            "type": "string"
+        },
+        "parameters":
+        {
+            "title": "Command parameters",
+            "description": "Parameters for the given action",
+            "type": "object"
+        },
+        "time":
+        {
+            "title": "Command send time",
+            "description": "Server-side time the command was sent to the client",
+            "type": "date-time"
+        },
+        "id":
+        {
+            "title": "Command ID",
+            "description": "Unique command ID for transactions",
+            "$comment": "Transactions are deferred actions that are occuring in the background, that may take a while to execute. This prevents lengthy delays in sending frames to clients.",
+            "type": "integer"
+        },
+        "completed":
+        {
+            "title": "Transaction completion status",
+            "description": "Describes whether or not a transaction is complete",
+            "type": "boolean"
+        },
+        "success":
+        {
+            "title": "Success flag",
+            "description": "Whether or not the command was successful",
+            "type": "boolean",
+            "$comment": "Error information will be stored in parameters, including code", "string, and other information"
+        },
+        "required": ["from", "command", "parameters", "time", "success"]
+    }
+}
+
