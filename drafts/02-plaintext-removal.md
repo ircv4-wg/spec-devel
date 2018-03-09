@@ -17,7 +17,7 @@ Some solutions that have been suggested are:
 - IRCv3 has suggested HSTS, a system similar to STS in HTTP; ultimately, HSTS suffers from man-in-the-middle injection problems; although they could be remedied (with signatures and the like), there seems to be little purpose in doing so, as a client already supporting SSL could just try SSL first
 - Try SSL first; would improve security, but leaves the possibility of plaintext open
 - STARTTLS; used by many protocols, but open to MITM stripping of STARTTLS headers, and has caused headaches in the past
-- Eliminate plaintext; the hazard is removed, with no complication
+- Eliminate plaintext; the hazard is removed, with no complication aside from the need for clients to adjust
 
 # Proposal
 It is proposed that plaintext be prohibited. Clients MUST NOT use plaintext ports and use of SSL ports is REQUIRED.
