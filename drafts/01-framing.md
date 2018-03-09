@@ -9,9 +9,9 @@ Status: Draft
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in [RFC 2119](https://www.ietf.org/rfc/rfc2119.txt).
 
 # Background
-RFC1459 framing is known to be deficient in many ways. It's difficult to parse correctly (quick: what does foo in `:foo@bar CMD` mean?), ambiguous (:nick is not the same thing as :nick.user.host), and unflexible (only one parameter is permitted to have spaces, and that is the last one). Most IRC daemons support a maximum of 8 parameters as well, which creates massive headaches for those wanting to create new commands; look no further than `WHO` to see the mess.
+RFC1459 framing is known to be deficient in many ways. It's difficult to parse correctly (quick: what does foo in `:foo@bar CMD` mean?), ambiguous (`:nick` is not the same thing as `:nick.user.host`), and unflexible (only one parameter is permitted to have spaces, and that is the last one). Most IRC daemons support a maximum of 8 parameters as well, which creates massive headaches for those wanting to create new commands; look no further than `WHO` to see the mess.
 
-There are also problems created by the now anemic 512 character length for messages, which often results in splitting messages.
+There are also problems created by the nowadays anemic 512 character length for messages, which often results in splitting messages.
 
 It's a format that dates from 1988, and has changed none since it's inception (although IRCv3 attempted to add tags, the adoption of tags has been far from widespread, and complicates an already annoying format further). Almost no IRC clients truly parse RFC1459 frames correctly, only bothering with the format FreeNode uses.
 
