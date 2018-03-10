@@ -62,9 +62,9 @@ Client to server example:
 Example responses:
 
 ```json
-{"to": {"target": "Elizafox", "type": "user", "local": true}, "from": {"server": "irc.butthead.org", local: true}, "command": "METADATA", "parameters": {"action": "SET", "key": "status", "value": "I'm gone!", "message": "Metadata set."}, "success": true, "id": 1}
+{"to": {"target": "Elizafox", "type": "user", "local": true}, "from": {"server": "irc.butthead.org", "local": true}, "command": "METADATA", "parameters": {"action": "SET", "key": "status", "value": "I'm gone!", "message": "Metadata set."}, "success": true, "id": 1}
 
-{"to": {"target": "Elizafox", "type": "user", "local": true}, "from": {"server": "irc.butthead.org", local: true}, "command": "METADATA", "parameters": {"action": "SET", "key": "status", "value": "I'm gone!", "message": "Could not set metadata: permission denied", "code": 400}, "success": false, "id": 1}
+{"to": {"target": "Elizafox", "type": "user", "local": true}, "from": {"server": "irc.butthead.org", "local": true}, "command": "METADATA", "parameters": {"action": "SET", "key": "status", "value": "I'm gone!", "message": "Could not set metadata: permission denied", "code": 400}, "success": false, "id": 1}
 ```
 
 ## The `GET` action
@@ -87,9 +87,9 @@ Client to server example:
 Example responses:
 
 ```json
-{"to": {"target": "Elizafox", "type": "user", "local": true}, "from": {"server": "irc.butthead.org", local: true}, "command": "METADATA", "parameters": {"action": "GET", "key": "status", "value": "I'm gone!"}, "success": true, "id": 1}
+{"to": {"target": "Elizafox", "type": "user", "local": true}, "from": {"server": "irc.butthead.org", "local": true}, "command": "METADATA", "parameters": {"action": "GET", "key": "status", "value": "I'm gone!"}, "success": true, "id": 1}
 
-{"to": {"target": "Elizafox", "type": "user", "local": true}, "from": {"server": "irc.butthead.org", local: true}, "command": "METADATA", "parameters": {"action": "GET", "key": "status", "message": "Key not found.", "code": 404}, "success": false, "id": 1}
+{"to": {"target": "Elizafox", "type": "user", "local": true}, "from": {"server": "irc.butthead.org", "local": true}, "command": "METADATA", "parameters": {"action": "GET", "key": "status", "message": "Key not found.", "code": 404}, "success": false, "id": 1}
 ```
 
 ## The `DELETE` action
@@ -112,9 +112,9 @@ Client to server example:
 Example responses:
 
 ```json
-{"to": {"target": "Elizafox", "type": "user", "local": true}, "from": {"server": "irc.butthead.org", local: true}, "command": "METADATA", "parameters": {"action": "DELETE", "key": "status"}, "success": true, "id": 1}
+{"to": {"target": "Elizafox", "type": "user", "local": true}, "from": {"server": "irc.butthead.org", "local": true}, "command": "METADATA", "parameters": {"action": "DELETE", "key": "status"}, "success": true, "id": 1}
 
-{"to": {"target": "Elizafox", "type": "user", "local": true}, "from": {"server": "irc.butthead.org", local: true}, "command": "METADATA", "parameters": {"action": "DELETE", "key": "status", "message": "Key not found.", "code": 404}, "success": false, "id": 1}
+{"to": {"target": "Elizafox", "type": "user", "local": true}, "from": {"server": "irc.butthead.org", "local": true}, "command": "METADATA", "parameters": {"action": "DELETE", "key": "status", "message": "Key not found.", "code": 404}, "success": false, "id": 1}
 ```
 
 ## The `SUBSCRIBE` action
@@ -143,9 +143,9 @@ Client to server example:
 Example responses:
 
 ```json
-{"to": {"target": "Elizafox", "type": "user", "local": true}, "from": {"server": "irc.butthead.org", local: true}, "command": "METADATA", "parameters": {"action": "SUBSCRIBE", "key": "message": "Subscription successful"}, "success": true, "id": 1}
+{"to": {"target": "Elizafox", "type": "user", "local": true}, "from": {"server": "irc.butthead.org", "local": true}, "command": "METADATA", "parameters": {"action": "SUBSCRIBE", "key": "message": "Subscription successful"}, "success": true, "id": 1}
 
-{"to": {"target": "Elizafox", "type": "user", "local": true}, "from": {"server": "irc.butthead.org", local: true}, "command": "METADATA", "parameters": {"action": "SUBSCRIBE", "key": "status", "message": "Subscription failed: permission denied", "code": 400}, "success": false, "id": 1}
+{"to": {"target": "Elizafox", "type": "user", "local": true}, "from": {"server": "irc.butthead.org", "local": true}, "command": "METADATA", "parameters": {"action": "SUBSCRIBE", "key": "status", "message": "Subscription failed: permission denied", "code": 400}, "success": false, "id": 1}
 ```
 
 ## The `UNSUBSCRIBE` action
@@ -172,9 +172,9 @@ Client to server example:
 Example responses:
 
 ```json
-{"to": {"target": "Elizafox", "type": "user", "local": true}, "from": {"server": "irc.butthead.org", local: true}, "command": "METADATA", "parameters": {"action": "UNSUBSCRIBE", "key": "message": "Unsubscription done."}, "success": true, "id": 1}
+{"to": {"target": "Elizafox", "type": "user", "local": true}, "from": {"server": "irc.butthead.org", "local": true}, "command": "METADATA", "parameters": {"action": "UNSUBSCRIBE", "key": "message": "Unsubscription done."}, "success": true, "id": 1}
 
-{"to": {"target": "Elizafox", "type": "user", "local": true}, "from": {"server": "irc.butthead.org", local: true}, "command": "METADATA", "parameters": {"action": "UNSUBSCRIBE", "key": "status", "message": "Unubscription failed: you are not subscribed", "code": 404}, "success": false, "id": 1}
+{"to": {"target": "Elizafox", "type": "user", "local": true}, "from": {"server": "irc.butthead.org", "local": true}, "command": "METADATA", "parameters": {"action": "UNSUBSCRIBE", "key": "status", "message": "Unubscription failed: you are not subscribed", "code": 404}, "success": false, "id": 1}
 ```
 
 # Security issues
