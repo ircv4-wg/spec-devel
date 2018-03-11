@@ -132,8 +132,6 @@ Servers MAY add restrictions to metadata subscriptions, but servers MUST restric
 
 Users MUST be notified of all new subscriptions to their metadata.
 
-(TBD: channel semantics)
-
 Client to server example:
 
 ```json
@@ -161,7 +159,7 @@ Subsequent calls to `UNSUBSCRIBE` MUST NOT affect previous or future subscriptio
 
 Users MUST be notified of all unsubscriptions from their metadata.
 
-(TBD: channel semantics)
+Servers MAY prohibit certain keys from being unsubscribed from, if such functionality is necessary for a feature to work.
 
 Client to server example:
 
@@ -176,6 +174,13 @@ Example responses:
 
 {"to": {"target": "Elizafox", "type": "user", "local": true}, "from": {"server": "irc.butthead.org", "local": true}, "command": "METADATA", "parameters": {"action": "UNSUBSCRIBE", "key": "status", "message": "Unubscription failed: you are not subscribed", "code": 404}, "success": false, "id": 1}
 ```
+
+# Implicit subscriptions
+When joining a channel, an implicit subscription to all of its metadata keys is created, which behaves as if the `SUBSCRIBE` action was performed on all metadata keys. However, the user MUST NOT be subscribed to any privileged keys or keys they would not normally have access to; if they later gain privilege, an implicit subscription MUST be created.
+
+Clients MUST be able to unsubscribe from individual keys in a channel. If clients later so choose, they MUST be able to reissue a `SUBSCRIBE` action for keys they have previously unsubscribed from, with the usual semantics and limitations of the `SUBSCRIBE` command.
+
+Other implicit metadata updates MAY be created by servers, but servers SHOULD notify users of such subscriptions, unless these subscriptions are an integral part of features.
 
 # Security issues
 Sensitive metadata MUST be protected from unauthorised access by users and channels.
