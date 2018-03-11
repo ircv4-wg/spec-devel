@@ -151,7 +151,7 @@ Example responses:
 ```
 
 # Implicit subscriptions
-When joining a channel, an implicit subscription to all of its metadata keys is created, which behaves as if the `SUBSCRIBE` action was performed on all metadata keys. However, the user MUST NOT be subscribed to any privileged keys or keys they would not normally have access to; if they later gain privilege, an implicit subscription MUST be created.
+When joining a channel, an implicit subscription to all of its metadata keys is created, which behaves as if the `SUBSCRIBE` action was performed on all metadata keys. However, the user MUST NOT be subscribed to any privileged keys or keys they would not normally have access to; if they later gain privilege, and would normally have an implicit `SUBSCRIBE` action performed on certain keys, the server must behave as if a `SUBSCRIBE` command was issued for said metadata. Clients SHOULD be notified of this occurence, to avoid surprising the user.
 
 Clients MUST be able to issue `UNSUBSCRIBE` actions from individual keys in a channel, unless such issuance would adversely affect the operation of the protocol or the client. If clients later so choose, they MUST be able to reissue a `SUBSCRIBE` action for keys they have previously unsubscribed from, with the usual semantics and limitations of the `SUBSCRIBE` action.
 
