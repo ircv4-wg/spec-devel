@@ -34,24 +34,13 @@ This command contains the following action parameters (parameter key name `"acti
 * `UNSUBSCRIBE`; which unsubscribes the user from notifications in changes for the value
 
 ## The `SET` action
-The `SET` action MUST have both of the following when the client sends a frame to the server:
+The `SET` action MUST have both a `"key"` and `"value"` parameter.
 
-* A key parameter, which MUST be a string or array of strings (parameter key name `"key"`)
-* A value, which MUST be either an array of strings, an array containing arrays of strings, or a string (parameter key name `"value"`)
+The server MUST respond with another `METADATA` command with the `"action"` parameter set to `SET`, the keys and values sent by the client, and whether or not the action was successful.
 
-Other keys MAY be set, but SHALL NOT affect the metadata returned by the server.
+A `SET` command MUST only succeed if the user has the rights to modify the target's metadata.
 
-When multiple keys are specified, values MUST be retrieved sequentially from the value of `"value"` if is an array. Servers MUST report an error if there are insufficient values to satisfy the request in the `"value"` field. If an array is given as keys and values, the client SHALL respond with the array of keys in `"key"` in the order sent by the client followed by values for each element in an array in `"value"`. If one of the elements of the `SET` action fails when an array is given as `"key"`, the failure MUST be signalled via a separate frame with the failed keys, and the failed keys MUST NOT be reported as successful.
-
-The server MUST respond with `SET` as the action key followed by the status and value keys sent by the client, and whether or not the action was successful. A server MAY send a message with the response or any other keys, but said keys MUST NOT change the semantics of the `SET` action. Errors SHALL be signalled with the top-level `"success"` key set to false.
-
-If successful, the server MUST place the metadata in some form of persistent storage. Calls to `GET` made after `SET` MUST NOT return any differing metadata, unless a `SET` action was issued by the server to all connected clients affected by this change notifying them of the new key and value set, or the `SET` action failed.
-
-If successful, a `SET` action issued MUST replace any existing values at the given key, unless the metadata is immutable or the user has no permission to set the metadata in question; in which case the server MUST NOT overwrite the existing entry, and MUST report an error to the client.
-
-Servers MUST NOT allow metadata to be set for other users, or on targets where the user does not have permission. Servers MAY add additional restrictions. Servers MUST report these denials as an error.
-
-Servers MAY throttle setting of metadata, if they so choose, but MUST report said throttling as an error.
+If successful, the server MUST place the metadata keys and values in some form of persistent storage, and additionally MUST overwrite any existing values if the value or values at the given key or keys already exist.
 
 Client to server example:
 
@@ -68,15 +57,11 @@ Example responses:
 ```
 
 ## The `GET` action
-The `GET` action SHALL retrieve a metadata entry for the client; that is to say, the value at the given key. The `GET` action SHALL require at least one key (parameter key name `"key"`). The value for the key MUST be either an array of strings, or a string. Other keys MAY be set, but SHALL NOT affect the metadata returned by the server. Errors SHALL be signalled with the top-level `"success"` key set to false.
+The `GET` action MUST have a `"key"` parameter.
 
-If an array is given as keys and values, the client SHALL respond with the array of keys in `"key"` in the order sent by the client followed by values in `"value"` given by the client. If one of the elements of the `GET` action fails when an array is given as `"key"`, the failure MUST be signalled via a separate frame with the failed keys, and the failed keys MUST NOT be reported as successful.
+If the key or keys do not exist, or there are no associated values with the given key or keys, or the user has no rights to retrieve the target's metadata, the server MUST return an error.
 
-If the given key exists, the server MUST return the value for the given key. If the key does not exist, the server MUST return an error.
-
-Servers MAY throttle retrieval of metadata, if they so choose, but MUST report said throttling as an error.
-
-Servers MAY add restrictions to metadata retrieval, but servers MUST restrict sensitive metadata. Servers MUST report these denials as an error.
+Upon success, the server MUST respond with another `METADATA` command with the `"action"` parameter set to `GET`, the key or keys requested by the client, and whether or not the action was successful. The `"value"` parameter SHALL be set if the command was successful, to the requested metadata values at the given key or keys.
 
 Client to server example:
 
@@ -93,15 +78,15 @@ Example responses:
 ```
 
 ## The `DELETE` action
-The `DELETE` action SHALL delete the given value at the given key, if such a value exists. The `DELETE` action SHALL require at least one key (parameter key name `"key"`). This key MUST be a string, or array of strings for keys to delete. Other keys may be specified as parameters, but said keys MUST NOT change the semantics of the `DELETE` action. Errors SHALL be signalled with the top-level `"success"` key set to false.
+The `DELETE` action MUST have a `"key"` parameter.
 
-If an array is given as keys and values, the client SHALL respond with the array of keys in `"key"` in the order sent by the client. Deleted values MAY be sent back. If one of the elements of the `DELETE` action fails when an array is given as `"key"`, the failure MUST be signalled via a separate frame with the failed keys, and the failed keys MUST NOT be reported as successful.
+If the key or keys do not exist, or there are no associated values with the given key or keys, or the user has no rights to delete the target's metadata, the server MUST return an error.
 
-If the given key exists, and the user has the rights to delete the key, the server MUST return the name of the key deleted. If the key does not exist, the server MUST return an error.
+Upon success, the server MUST respond with another `METADATA` command with the `"action"` parameter set to `DELETE`, the key or keys requested for deletion by the client, and whether or not the action was successful. The `"value"` parameter MAY be set to the previous deleted values if the command was successful.
 
-Servers MUST NOT allow metadata to be deleted for other users, or on targets where the user does not have permission. Servers MAY add additional restrictions. Servers MUST report these denials as an error.
+The associated metadata SHALL be deleted from persistent storage. Retrievals for deleted metadata MUST behave as if the entry has never existed.
 
-Servers MAY throttle retrieval of metadata, if they so choose, but MUST report said throttling as an error.
+Servers MAY prohibit the deletion of certain vital metadata if it would adversely affect the operation of the server.
 
 Client to server example:
 
@@ -118,19 +103,15 @@ Example responses:
 ```
 
 ## The `SUBSCRIBE` action
-The `SUBSCRIBE` action SHALL subscribe the user issuing the action to updates in certain metadata entries from the target in `"to"`. Users MAY NOT subscribe to updates from themselves. All other targets SHALL be valid. The `SUBSCRIBE` action SHALL require at least one key (parameter name `"key"`). The value for the key MUST be either an array of strings, or a string. Other keys MAY be set, but SHALL NOT affect the metadata returned by the server. Errors SHALL be signalled with the top-level `"success"` key set to false.
+The `SUBSCRIBE` action MUST have a `"key"` parameter.
 
-If an array is given as keys and values, the client SHALL respond with the array of keys in `"key"` in the order sent by the client. If one of the elements of the `SUBSCRIBE` action fails when an array is given as `"key"`, the failure MUST be signalled via a separate frame with the failed keys, and the failed keys MUST NOT be reported as successful.
+The `SUBSCRIBE` action, if successful, SHALL cause the user issuing the action to receive all future `SET` and `DELETE` operations on the metadata keys and values, regardless of the existence of such values. Such actions SHALL have the `"from"` field set to the target.
 
-`SUBSCRIBE` SHALL work even if the keys are not yet set on the target.
+The `SUBSCRIBE` action SHALL fail if the target is the user issuing the command or has no rights to retrieve the metadata.
 
-Once metadata is successfully subscribed to, servers MUST send all `SET` and `DELETE` actions on the metadata keys the user is subscribed to, with the `"from"` field set to the subscribee.
+Users MUST be notified of all successful `SUBSCRIBE` actions on their metadata. Channels MAY be notified of successful `SUBSCRIBE` actions on their metadata.
 
-Subsequent calls to `SUBSCRIBE` MUST NOT affect previous or future subscriptions in any way.
-
-Servers MAY add restrictions to metadata subscriptions, but servers MUST restrict sensitive metadata. Servers MUST report these denials as an error.
-
-Users MUST be notified of all new subscriptions to their metadata.
+It is RECOMMENDED clients perform a `GET` operation after performing the `SUBSCRIBE` operation to sync the present value of metadata.
 
 Client to server example:
 
@@ -147,19 +128,13 @@ Example responses:
 ```
 
 ## The `UNSUBSCRIBE` action
-The `UNSUBSCRIBE` action SHALL unsubscribe the user issuing the action from updates in certain metadata entries from the target in `"to"`. Users MAY NOT unsubscribe to updates from themselves. All other targets SHALL be valid. The `UNSUBSCRIBE` action SHALL require at least one key (parameter name `"key"`). The value for the key MUST be either an array of strings, or a string. Other keys MAY be set, but SHALL NOT affect the metadata returned by the server. Errors SHALL be signalled with the top-level `"success"` key set to false.
+The `UNSUBSCRIBE` action MUST have a `"key"` parameter.
 
-If an array is given as keys and values, the client SHALL respond with the array of keys in `"key"` in the order sent by the client. If one of the elements of the `UNSUBSCRIBE` action fails when an array is given as `"key"`, the failure MUST be signalled via a separate frame with the failed keys, and the failed keys MUST NOT be reported as successful.
+The `UNSUBSCRIBE` action, if successful, SHALL cause the user issuing the action to cease reciept of any and all future `SET` and `DELETE` operations on the metadata keys and values.
 
-`UNSUBSCRIBE` SHALL report an error if the user is not subscribed to the given key.
+The `UNSUBSCRIBE` action SHALL fail if the target is the user issuing the command, if such issuance would adversely affect the operation of the protocol, or no successful `SUBSCRIBE` operation was performed on the key or keys.
 
-Once metadata is successfully unsubscribed to, servers MUST cease sending `SET` and `DELETE` actions on the metadata keys the user has unsubscribed from.
-
-Subsequent calls to `UNSUBSCRIBE` MUST NOT affect previous or future subscriptions in any way, nor affect anything but the targeted subscriptions.
-
-Users MUST be notified of all unsubscriptions from their metadata.
-
-Servers MAY prohibit certain keys from being unsubscribed from, if such functionality is necessary for a feature to work.
+Users MUST be notified of all successful `UNSUBSCRIBE` actions on their metadata. Channels MAY be notified of successful `UNSUBSCRIBE` actions on their metadata.
 
 Client to server example:
 
@@ -178,9 +153,34 @@ Example responses:
 # Implicit subscriptions
 When joining a channel, an implicit subscription to all of its metadata keys is created, which behaves as if the `SUBSCRIBE` action was performed on all metadata keys. However, the user MUST NOT be subscribed to any privileged keys or keys they would not normally have access to; if they later gain privilege, an implicit subscription MUST be created.
 
-Clients MUST be able to unsubscribe from individual keys in a channel. If clients later so choose, they MUST be able to reissue a `SUBSCRIBE` action for keys they have previously unsubscribed from, with the usual semantics and limitations of the `SUBSCRIBE` action.
+Clients MUST be able to issue `UNSUBSCRIBE` actions from individual keys in a channel, unless such issuance would adversely affect the operation of the protocol or the client. If clients later so choose, they MUST be able to reissue a `SUBSCRIBE` action for keys they have previously unsubscribed from, with the usual semantics and limitations of the `SUBSCRIBE` action.
 
 Other implicit metadata updates MAY be created by servers, but servers SHOULD notify users of such subscriptions, unless these subscriptions are an integral part of features.
+
+# Semantics applying to all actions
+The following semantics are shared between all actions.
+
+## Errors
+Errors SHALL be signalled with the top-level `"success"` key set to `false`.
+
+Unsuccessful actions SHALL NOT have any effect on any keys, or retrieve any sensitive information.
+
+Servers MAY throttle metadata actions, if they so choose, but MUST report said throttling as an error.
+
+Servers MUST restrict actions on sensitive metadata, or metadata the user has no rights to perform the given action on. Servers MAY add additional restrictions. Servers MUST report all denials as errors.
+
+## Restrictions on keys and values
+Metadata keys MUST be strings. Metadata values MUST be strings, numbers, true, false, or an array containing strings.
+
+## Multiple keys and values in one action
+All actions MUST accept multiple metadata keys as an array of strings for the `"key"` element of the `"parameters"` object. If values are required for the given command, the value of the `"value"` element of the `"parameters"` object MUST be an array containing as many elements as the `"key"` array. Servers MUST assume each element of the key array corresponds to a value in the value array.
+
+Normal restrictions on values apply to each element in both arrays. The final effect MUST be the same as if the commands had been issued individually.
+
+## Target validity
+Unless otherwise specified, all targets SHALL be valid.
+
+When an array is passed, servers SHALL behave as if each key in the key array and its corresponding value in the value array are attempts to set values for the given keys. Servers MAY reply with arrays with multiple keys and values for such requests, but servers MUST report successful and unsuccessful actions on keys in a separate metadata frame with the `"id"` parameter set to the parameter sent by the client in the original request.
 
 # Security issues
 Sensitive metadata MUST be protected from unauthorised access by users and channels.
