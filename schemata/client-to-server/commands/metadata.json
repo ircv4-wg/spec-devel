@@ -1,0 +1,106 @@
+{
+    "definitions":
+    {
+        "key-or-value":
+        {
+            "oneOf":
+            [
+                { "type": "string" },
+                { "type": "array", "items": { "type": "string" } }
+            ]
+        },
+        "get":
+        {
+            "type": "object",
+            "properties":
+            {
+                    "action":
+                    {
+                        "type": "string",
+                        "pattern": "^[Gg][Ee][Tt]$"
+                    },
+                    "key": { "$ref": "#/definitions/key-or-value" }
+            },
+            "require": ["action", "key"]
+        },
+        "set":
+        {
+            "type": "object",
+            "properties":
+            {
+                    "action":
+                    {
+                        "type": "string",
+                        "pattern": "^[Ss][Ee][Tt]$"
+                    },
+                    "key": { "$ref": "#/definitions/key-or-value" },
+                    "value": { "$ref": "#/definitions/key-or-value" }
+            },
+            "require": ["action", "key", "value"]
+        },
+        "delete":
+        {
+            "type": "object",
+            "properties":
+            {
+                    "action":
+                    {
+                        "type": "string",
+                        "pattern": "^[Dd][Ee][Ll][Ee][Tt][Ee]$"
+                    },
+                    "key": { "$ref": "#/definitions/key-or-value" }
+            },
+            "require": ["action", "key"]
+        },
+        "subscribe":
+        {
+            "type": "object",
+            "properties":
+            {
+                    "action":
+                    {
+                        "type": "string",
+                        "pattern": "^[Ss][Uu][Bb][Ss][Cc][Rr][Ii][Bb][Ee]$"
+                    },
+                    "key": { "$ref": "#/definitions/key-or-value" }
+            },
+            "require": ["action", "key"]
+        },
+        "unsubscribe":
+        {
+            "type": "object",
+            "properties":
+            {
+                    "action":
+                    {
+                        "type": "string",
+                        "pattern": "^[Uu][Nn][Ss][Uu][Bb][Ss][Cc][Rr][Ii][Bb][Ee]$"
+                    },
+                    "key": { "$ref": "#/definitions/key-or-value" }
+            },
+            "require": ["action", "key"]
+        },
+        "command":
+        {
+            "type": "string",
+            "pattern": "^[Mm][Ee][Tt][Aa][Dd][Aa][Tt][Aa]$"
+        },
+        "parameters":
+        {
+            "oneOf":
+            [
+                { "$ref": "#/definitions/get" },
+                { "$ref": "#/definitions/set" },
+                { "$ref": "#/definitions/delete" },
+                { "$ref": "#/definitions/subscribe" },
+                { "$ref": "#/definitions/unsubscribe" }
+            ]
+        }
+        "frame-elements":
+        {
+            "description": "Elements of the frame required together for this command",
+            "command": { "#/definitions/command" },
+            "parameters": { "#/definitions/parameters" }
+        }
+    }
+}

@@ -1,0 +1,17 @@
+{
+    "title": "IRCv4 commands",
+    "description": "Definitions for valid IRCv4 commands",
+    "$comment": "do not include commands directly in this file",
+    "definitions":
+    {
+        "frame-elements":
+        {
+            "title": "IRCv4 frame elements for commands",
+            "description": "All required elements for a frame for commands",
+            "oneOf":
+            [
+                { "$ref": "commands/metadata.json#/definitions/frame-elements" }
+            ]
+        }
+    }
+}

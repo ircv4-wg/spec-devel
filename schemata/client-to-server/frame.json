@@ -1,8 +1,9 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "$id": "http://example.org/tbd",
+    "$comment": ["$id", "http://example.org/tbd" ],
     "title": "IRCv4 client-to-server frame",
     "description": "Specification for the IRCv4 client-to-server frame",
+    "type": "object",
     "definitions":
     {
         "target":
@@ -40,40 +41,46 @@
             "required": ["type", "target", "local"]
         }
     },
-    "properties":
-    {
-        "to":
+    "allOf":
+    [
         {
-            "title": "Frame destination",
-            "$ref": "#/definitions/target"
+            "properties":
+            {
+                "to":
+                {
+                    "title": "Frame destination",
+                    "$ref": "#/definitions/target"
+                },
+                "command":
+                {
+                    "title": "Command",
+                    "description": "Action that is requested",
+                    "type": "string"
+                },
+                "parameters":
+                {
+                    "title": "Command parameters",
+                    "description": "Parameters for the given action",
+                    "type": "object"
+                },
+                "time":
+                {
+                    "title": "Command send time",
+                    "description": "Client-side time the command was sent to the client",
+                    "$comment": "TBD: May be removed for c2s usage",
+                    "type": "date-time"
+                },
+                "id":
+                {
+                    "title": "Command ID",
+                    "description": "Unique command ID",
+                    "$comment": "Clients should send this field with each command, to which the server will respond with the id once the action is completed",
+                    "type": "integer"
+                },
+                "required": ["from", "command", "parameters", "id"]
+            }
         },
-        "command":
-        {
-            "title": "Command",
-            "description": "Action that is requested",
-            "type": "string"
-        },
-        "parameters":
-        {
-            "title": "Command parameters",
-            "description": "Parameters for the given action",
-            "type": "object"
-        },
-        "time":
-        {
-            "title": "Command send time",
-            "description": "Client-side time the command was sent to the client",
-            "$comment": "TBD: May be removed for c2s usage",
-            "type": "date-time"
-        },
-        "id":
-        {
-            "title": "Command ID",
-            "description": "Unique command ID",
-            "$comment": "Clients should send this field with each command, to which the server will respond with the id once the action is completed",
-            "type": "integer"
-        },
-        "required": ["from", "command", "parameters", "id"]
-    }
+        { "$ref": "commands.json#/definitions/frame-elements" }
+    ]
 }
 
