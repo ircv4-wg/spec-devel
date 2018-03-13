@@ -95,7 +95,7 @@
                 { "$ref": "#/definitions/subscribe" },
                 { "$ref": "#/definitions/unsubscribe" }
             ]
-        }
+        },
         "frame-elements":
         {
             "description": "Elements of the frame required together for this command",
