@@ -80,7 +80,10 @@
                 "required": ["from", "command", "parameters", "id"]
             }
         },
-        { "$ref": "commands.json#/definitions/frame-elements" }
+        {
+            "$comment": "Command frames, which define parameters and command",
+            "$ref": "commands.json#/definitions/frame-elements"
+        }
     ]
 }
 
