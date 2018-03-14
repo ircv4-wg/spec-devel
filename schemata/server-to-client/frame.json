@@ -40,57 +40,64 @@
             "required": ["type", "target", "server", "local"]
         }
     },
-    "properties":
-    {
-        "to":
+    "allOf":
+    [
+        "properties":
         {
-            "title": "Frame destination",
-            "$ref": "#/definitions/target"
+            "to":
+            {
+                "title": "Frame destination",
+                "$ref": "#/definitions/target"
+            },
+            "from":
+            {
+                "title": "Frame source",
+                "$ref": "#/definitions/target"
+            },
+            "command":
+            {
+                "title": "Command",
+                "description": "Action that has or is being performed",
+                "type": "string"
+            },
+            "parameters":
+            {
+                "title": "Command parameters",
+                "description": "Parameters for the given action",
+                "type": "object"
+            },
+            "time":
+            {
+                "title": "Command send time",
+                "description": "Server-side time the command was sent to the client",
+                "type": "date-time"
+            },
+            "id":
+            {
+                "title": "Command ID",
+                "description": "ID sent by the client for a command",
+                "$comment": "Since IRCv4 is fully asynchronous, some actions may be deferred in what is known as a transaction, especially ones that may take a while to execute. Once the action completed, the ID used by the client for the triggering command will be sent back.",
+                "type": "integer"
+            },
+            "completed":
+            {
+                "title": "Transaction completion status",
+                "description": "Describes whether or not a transaction is complete",
+                "type": "boolean"
+            },
+            "success":
+            {
+                "title": "Success flag",
+                "description": "Whether or not the command was successful",
+                "type": "boolean",
+                "$comment": "Error information will be stored in parameters, including code", "string, and other information"
+            },
+            "required": ["from", "command", "parameters", "time", "success"]
         },
-        "from":
         {
-            "title": "Frame source",
-            "$ref": "#/definitions/target"
-        },
-        "command":
-        {
-            "title": "Command",
-            "description": "Action that has or is being performed",
-            "type": "string"
-        },
-        "parameters":
-        {
-            "title": "Command parameters",
-            "description": "Parameters for the given action",
-            "type": "object"
-        },
-        "time":
-        {
-            "title": "Command send time",
-            "description": "Server-side time the command was sent to the client",
-            "type": "date-time"
-        },
-        "id":
-        {
-            "title": "Command ID",
-            "description": "ID sent by the client for a command",
-            "$comment": "Since IRCv4 is fully asynchronous, some actions may be deferred in what is known as a transaction, especially ones that may take a while to execute. Once the action completed, the ID used by the client for the triggering command will be sent back.",
-            "type": "integer"
-        },
-        "completed":
-        {
-            "title": "Transaction completion status",
-            "description": "Describes whether or not a transaction is complete",
-            "type": "boolean"
-        },
-        "success":
-        {
-            "title": "Success flag",
-            "description": "Whether or not the command was successful",
-            "type": "boolean",
-            "$comment": "Error information will be stored in parameters, including code", "string, and other information"
-        },
-        "required": ["from", "command", "parameters", "time", "success"]
-    }
+            "$comment": "Command frames, which define parameters and command",
+            "$ref": "commands.json#/definitions/frame-elements"
+        }
+    ]
 }
 
